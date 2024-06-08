@@ -1,5 +1,6 @@
 name: Build and Push Docker Images
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -33,15 +34,10 @@ jobs:
           username: ${{ secrets.CI_BOT_USERNAME }}
           password: ${{ secrets.CI_BOT_TOKEN }}
 
-      - name: Get list of container directories
-        id: containers
-        run: |
-          echo "::set-output name=directories::$(find ./containers -mindepth 1 -maxdepth 1 -type d -printf '%f\n')"
-
       - name: Build and push Docker images
         id: docker_build
         run: |
-          for container in ${{ steps.containers.outputs.directories }}; do
+          for container in $(find ./containers -mindepth 1 -maxdepth 1 -type d -printf '%f\n'); do
             version=$(./containers/$container/VERSION)
             docker buildx build --platform linux/amd64,linux/arm64 -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/$container:latest -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/$container:$version ./containers/$container --push
           done
