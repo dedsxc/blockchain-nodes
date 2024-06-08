@@ -1,6 +1,5 @@
 name: Build and Push Docker Images
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
@@ -12,8 +11,35 @@ env:
   GHCR_REGISTRY_REPO: ${{ secrets.GHCR_REPO }}
 
 jobs:
-  build-and-push:
+  discover-modified-containers:
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.modified-containers.outputs.matrix }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4
+        with:
+          fetch-depth: 2
+
+      - name: Get list of modified container directories
+        id: modified-containers
+        run: |
+          modified_containers=$(git diff --name-only HEAD~1 HEAD -- "containers/" | awk -F'/' '{print $2}' | sort | uniq)
+          echo "modified_containers=$modified_containers"
+          if [ -z "$modified_containers" ]; then
+            echo "No changes detected in containers."
+            matrix='{[]}'
+          else
+            matrix=$(jq -nc --arg containers "$modified_containers" '$containers | split("\n")')
+          fi
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+
+  build-and-push:
+    needs: discover-modified-containers
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: 
+        container: ${{ fromJson(needs.discover-modified-containers.outputs.matrix) }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4
@@ -37,7 +63,5 @@ jobs:
       - name: Build and push Docker images
         id: docker_build
         run: |
-          for container in $(find ./containers -mindepth 1 -maxdepth 1 -type d -printf '%f\n'); do
-            version=$(./containers/$container/VERSION)
-            docker buildx build --platform linux/amd64,linux/arm64 -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/$container:latest -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/$container:$version ./containers/$container --push
-          done
+          version=$(./containers/${{ matrix.container }}/VERSION)
+          docker buildx build --platform linux/amd64,linux/arm64 -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/${{ matrix.container }}:latest -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/${{ matrix.container }}:$version ./containers/${{ matrix.container }} --push

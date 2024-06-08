@@ -46,5 +46,4 @@ USER user
 
 EXPOSE 9650 4317
 
-
 CMD [ "avalanchego"]
