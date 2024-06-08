@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "containers/**"
 
 env:
   GHCR_REGISTRY: ghcr.io
