@@ -43,6 +43,15 @@ WORKDIR ${HOME}
 
 USER user
 
-EXPOSE 8545 6060
+EXPOSE 8545 \
+    8551 \
+    8546 \
+    30303 \
+    30303/udp \
+    42069 \
+    42069/udp \
+    8080 \
+    9090 \
+    6060
 
 CMD [ "/app/erigon" ]
