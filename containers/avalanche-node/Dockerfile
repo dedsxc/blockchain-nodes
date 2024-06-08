@@ -33,11 +33,11 @@ COPY --from=fetcher /tmp/version_info /tmp/version_info
 RUN source /tmp/version_info && \
     wget -O /tmp/avalanchego.tar.gz https://github.com/ava-labs/avalanchego/releases/download/v${VERSION}/avalanchego-linux-${ARCH}-v${VERSION}.tar.gz && \
     tar xzvf /tmp/avalanchego.tar.gz -C /app/ && \
-    mv /app/avalanchego-v${VERSION}/avalanchego /app/avalanchego && \
+    mv /app/avalanchego-v${VERSION}/avalanchego /usr/bin/avalanchego && \
     rm -rf /tmp/avalanchego.tar.gz /app/avalanchego-v${VERSION}
 
 # Setup permission
-RUN chmod +x ${HOME}/avalanchego && \
+RUN chmod +x /usr/bin/avalanchego && \
     chown -R user:user ${HOME}
 
 WORKDIR ${HOME}
@@ -47,4 +47,4 @@ USER user
 EXPOSE 9650 4317
 
 
-CMD [ "/app/avalanchego"]
+CMD [ "avalanchego"]

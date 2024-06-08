@@ -32,11 +32,11 @@ COPY --from=fetcher /tmp/version_info /tmp/version_info
 # Source the version and architecture info and download Erigon
 RUN source /tmp/version_info && \
     wget -O /tmp/erigon.tar.gz https://github.com/ledgerwatch/erigon/releases/download/v${VERSION}/erigon_${VERSION}_linux_${ARCH}.tar.gz && \
-    tar xzvf /tmp/erigon.tar.gz -C ${HOME} && \
+    tar xzvf /tmp/erigon.tar.gz -C /usr/bin && \
     rm /tmp/erigon.tar.gz
 
 # Setup permission
-RUN chmod +x ${HOME}/erigon && \
+RUN chmod +x /usr/bin/erigon && \
     chown -R user:user ${HOME}
 
 WORKDIR ${HOME}
@@ -54,4 +54,4 @@ EXPOSE 8545 \
     9090 \
     6060
 
-CMD [ "/app/erigon" ]
+CMD [ "erigon" ]
