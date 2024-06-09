@@ -30,10 +30,17 @@ jobs:
           username: ${{ secrets.CI_BOT_USERNAME }}
           password: ${{ secrets.CI_BOT_TOKEN }}
 
-      - name: Build and push Docker images
-        id: docker_build
+      - name: Build-Push linux/arm64
+        continue-on-error: true
         run: |
           for container in $(find ./containers -mindepth 1 -maxdepth 1 -type d -printf '%f\n'); do
             version=$(./containers/$container/VERSION)
-            docker buildx build --platform linux/amd64,linux/arm64 -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/$container:latest -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/$container:$version ./containers/$container --push
+            docker buildx build --push --platform linux/arm64 -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/$container:latest -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/$container:$version ./containers/$container
+          done
+
+      - name: Build-Push linux/amd64
+        run: |
+          for container in $(find ./containers -mindepth 1 -maxdepth 1 -type d -printf '%f\n'); do
+            version=$(./containers/$container/VERSION)
+            docker buildx build --push --platform linux/amd64 -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/$container:latest -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/$container:$version ./containers/$container
           done

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+github_repo=solana-labs/solana
+
+version=$(curl -sX GET "https://api.github.com/repos/${github_repo}/releases/latest" | jq --raw-output '.tag_name' | sed 's/^v//')
+printf "%s" "${version}"

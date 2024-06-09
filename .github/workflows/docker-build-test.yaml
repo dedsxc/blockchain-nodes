@@ -1,8 +1,6 @@
-name: Build and Push Docker Images
+name: Build Docker Images
 on:
-  push:
-    branches:
-      - main
+  pull_request:
     paths:
       - "containers/**"
 
@@ -34,7 +32,7 @@ jobs:
           fi
           echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
 
-  build-and-push:
+  build-test:
     needs: discover-modified-containers
     runs-on: ubuntu-latest
     strategy:
@@ -60,14 +58,13 @@ jobs:
           username: ${{ secrets.CI_BOT_USERNAME }}
           password: ${{ secrets.CI_BOT_TOKEN }}
 
-      - name: Build-Push linux/arm64
+      - name: Build linux/amd64
+        run: |
+          version=$(./containers/${{ matrix.container }}/VERSION)
+          docker buildx build --platform linux/amd64 -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/${{ matrix.container }}:latest -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/${{ matrix.container }}:$version ./containers/${{ matrix.container }}
+      
+      - name: Build linux/arm64
         continue-on-error: true
         run: |
           version=$(./containers/${{ matrix.container }}/VERSION)
-          docker buildx build --push --platform linux/arm64 -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/${{ matrix.container }}:latest -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/${{ matrix.container }}:$version ./containers/${{ matrix.container }}
-
-      - name: Build-Push linux/amd64
-        run: |
-          version=$(./containers/${{ matrix.container }}/VERSION)
-          docker buildx build --push --platform linux/amd64 -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/${{ matrix.container }}:latest -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/${{ matrix.container }}:$version ./containers/${{ matrix.container }}
-      
+          docker buildx build --platform linux/arm64 -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/${{ matrix.container }}:latest -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/${{ matrix.container }}:$version ./containers/${{ matrix.container }}
