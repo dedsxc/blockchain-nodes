@@ -25,7 +25,8 @@ ENV CONFIG_DIR=/heimdalld
 ENV HOME=/app
 
 # Install wget
-RUN apt update; apt install -y wget sudo && \
+## pv and aria2 is needed for downloading snapshot
+RUN apt update; apt install -y wget sudo pv aria2 && \
     mkdir ${HOME} && \
     adduser user
 

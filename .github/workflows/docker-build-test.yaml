@@ -58,11 +58,6 @@ jobs:
           username: ${{ secrets.CI_BOT_USERNAME }}
           password: ${{ secrets.CI_BOT_TOKEN }}
 
-      - name: Build linux/amd64
-        run: |
-          version=$(./containers/${{ matrix.container }}/VERSION)
-          docker buildx build --platform linux/amd64 -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/${{ matrix.container }}:latest -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/${{ matrix.container }}:$version ./containers/${{ matrix.container }}
-      
       - name: Build-Push image
         continue-on-error: true
         run: |
