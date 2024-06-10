@@ -63,8 +63,8 @@ jobs:
           version=$(./containers/${{ matrix.container }}/VERSION)
           docker buildx build --platform linux/amd64 -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/${{ matrix.container }}:latest -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/${{ matrix.container }}:$version ./containers/${{ matrix.container }}
       
-      - name: Build linux/arm64
+      - name: Build-Push image
         continue-on-error: true
         run: |
           version=$(./containers/${{ matrix.container }}/VERSION)
-          docker buildx build --platform linux/arm64 -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/${{ matrix.container }}:latest -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/${{ matrix.container }}:$version ./containers/${{ matrix.container }}
+          docker buildx build --platform linux/arm64,linux/amd64 -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/${{ matrix.container }}:latest -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/${{ matrix.container }}:$version ./containers/${{ matrix.container }}
