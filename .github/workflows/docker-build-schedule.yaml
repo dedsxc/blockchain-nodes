@@ -37,5 +37,5 @@ jobs:
           set +e
           for container in $(find ./containers -mindepth 1 -maxdepth 1 -type d -printf '%f\n'); do
             version=$(./containers/$container/VERSION)
-            docker buildx build --push --platform linux/arm64,linux/amd64 -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/$container:latest -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/$container:$version ./containers/$container || true
+            docker buildx build --push --platform linux/arm64,linux/amd64 -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ steps.get_repo_name.outputs.repo_name }}/$container:$version ./containers/$container || true
           done

@@ -14,7 +14,6 @@ if [ ! -d "$HOME/data" ] || [ -z "$(ls -A $HOME/data)" ]; then
 
     # Configure seeds and peers
     wget -nv -O $HOME/config/addrbook.json https://dl2.quicksync.io/json/addrbook.cosmos.json
-    sed -i 's|^seeds =.*|seeds = "bf8328b66dceb4987e5cd94430af66045e59899f@public-seed.cosmos.vitwit.com:26656,ba3bacc714817218562f743178228f23678b2873@public-seed-node.cosmoshub.certus.one:26656"|g' $HOME/config/config.toml
 
     # Configure gas price
     sed -i 's|^minimum-gas-prices =.*|minimum-gas-prices = "0.0025uatom"|g' $HOME/config/app.toml
@@ -24,7 +23,6 @@ if [ ! -d "$HOME/data" ] || [ -z "$(ls -A $HOME/data)" ]; then
     sed -i 's|^pruning =.*|pruning = "default"|g' $HOME/config/app.toml
 
     # Enable prometheus
-    ## see: https://docs.polygon.technology/pos/how-to/full-node/full-node-binaries/#configure-heimdall-seeds-mainnet
     sed -i 's|^prometheus =.*|prometheus = "true"|g' $HOME/config/config.toml
     sed -i 's|^max_open_connections =.*|max_open_connections = 100|g' $HOME/config/config.toml
 
