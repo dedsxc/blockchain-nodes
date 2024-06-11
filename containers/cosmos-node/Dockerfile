@@ -27,11 +27,11 @@ RUN source /tmp/version_info && \
 FROM debian:stable-slim@sha256:2b2e35d67c8fda0ba853d40cd18e57b99ab12d82fd3200607015eb09784068bd
 
 # Define CONFIG_DIR as env variable to be used in entrypoint.sh
-ENV CONFIG_DIR=/cosmos
+ENV CONFIG_DIR=/data
 ENV HOME=/app
 
 # Install wget
-RUN apt update; apt install -y wget lz4 && \
+RUN apt update; apt install -y wget lz4 libxml2-utils && \
     mkdir ${HOME} ${CONFIG_DIR} && \
     adduser user
 
@@ -49,7 +49,8 @@ USER user
 
 EXPOSE 1317 \
     9090 \
-    26660
+    26656 \
+    26657
 
 ENTRYPOINT [ "entrypoint.sh"]
 
