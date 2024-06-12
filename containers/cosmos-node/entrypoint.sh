@@ -30,28 +30,28 @@ if [ ! -d "$CONFIG_DIR/data" ] || [ -z "$(ls -A $CONFIG_DIR/data)" ]; then
     sed -i 's|^prometheus =.*|prometheus = "true"|g' $CONFIG_DIR/config/config.toml
     sed -i 's|^max_open_connections =.*|max_open_connections = 100|g' $CONFIG_DIR/config/config.toml
 
-    # Download pruned snapshot
-    # Or check in https://polkachu.com/tendermint_snapshots/cosmos for 15Gi snapshot
-    latest_snapshot=$(wget -qO- https://snapshots.polkachu.com/snapshots/ | xmllint --format - | grep '<Key>' | grep 'cosmos' | sed -e 's|.*<Key>cosmos/\(.*\)</Key>.*|\1|')
-    echo -e "\e[32m[+]\e[0m Downloading snapshot"
+    # Download polkachu snapshot
+    # check in https://polkachu.com/tendermint_snapshots/cosmos for 15Gi snapshot
+    latest_snapshot=$(wget -qO- https://snapshots.polkachu.com/snapshots/ | xmllint --format - | grep '<Key>' | grep 'cosmos' | sed -e 's|.*<Key>cosmos/\(.*\)</Key>.*|\1|' | tail -n 1)
+    echo -e "\e[32m[+]\e[0m Downloading snapshot $latest_snapshot"
     wget -nv -O cosmos.tar.lz4 https://snapshots.polkachu.com/snapshots/cosmos/$latest_snapshot
     
     # Extracting archive
     echo -e "\e[32m[+]\e[0m Extracting archive"
-    lz4 -qd cosmos.tar.lz4 > /dev/null 2>&1
+    lz4 -qd -c cosmos.tar.lz4 > cosmos.tar
     tar -xf cosmos.tar -C $CONFIG_DIR/data --strip-components=1
-    rm -rf cosmos.tar.lz4
+    rm -rf cosmos.tar.lz4 cosmos.tar
 fi
 
 # Copy custom config
 if [ -f "/tmp/config/app.toml" ]; then
     echo -e "\e[90m[+]\e[0m Copy custom app.toml"
-    mv /tmp/config/app.toml $CONFIG_DIR/config/app.toml
+    cp /tmp/config/app.toml $CONFIG_DIR/config/app.toml
 fi
 
 if [ -f "/tmp/config/config.toml" ]; then
     echo -e "\e[90m[+]\e[0m Copy custom config.toml"
-    mv /tmp/config/config.toml $CONFIG_DIR/config/config.toml
+    cp /tmp/config/config.toml $CONFIG_DIR/config/config.toml
 fi
 
 

@@ -36,12 +36,12 @@ fi
 # Copy custom config
 if [ -f "/tmp/config/app.toml" ]; then
     echo -e "\e[90m[+]\e[0m Copy custom app.toml"
-    mv /tmp/config/app.toml $CONFIG_DIR/config/app.toml
+    cp /tmp/config/app.toml $CONFIG_DIR/config/app.toml
 fi
 
 if [ -f "/tmp/config/config.toml" ]; then
     echo -e "\e[90m[+]\e[0m Copy custom config.toml"
-    mv /tmp/config/config.toml $CONFIG_DIR/config/config.toml
+    cp /tmp/config/config.toml $CONFIG_DIR/config/config.toml
 fi
 
 # Start heimdalld
