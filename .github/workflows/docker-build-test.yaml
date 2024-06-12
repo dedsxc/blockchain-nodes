@@ -59,7 +59,7 @@ jobs:
           password: ${{ secrets.CI_BOT_TOKEN }}
 
       - name: Build-Push image
-        continue-on-error: true
         run: |
           version=$(./containers/${{ matrix.container }}/VERSION)
-          docker buildx build --platform linux/arm64,linux/amd64 ./containers/${{ matrix.container }}
+          platform=$(cat ./containers/${{ matrix.container }}/PLATFORM)
+          docker buildx build --platform $platform ./containers/${{ matrix.container }}

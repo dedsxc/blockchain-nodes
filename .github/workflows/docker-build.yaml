@@ -61,7 +61,7 @@ jobs:
           password: ${{ secrets.CI_BOT_TOKEN }}
 
       - name: Build-Push image
-        continue-on-error: true
         run: |
           version=$(./containers/${{ matrix.container }}/VERSION)
-          docker buildx build --push --platform linux/arm64,linux/amd64 -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ matrix.container }}:$version ./containers/${{ matrix.container }}
+          platform=$(cat ./containers/${{ matrix.container }}/PLATFORM)
+          docker buildx build --push --platform $platform -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ matrix.container }}:$version ./containers/${{ matrix.container }}
