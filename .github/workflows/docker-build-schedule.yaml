@@ -39,5 +39,7 @@ jobs:
             if [ "$upstream_version" != "$current_version" ]; then
               platform=$(cat ./containers/$container/PLATFORM)
               docker buildx build --push --platform $platform -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/$container:$version ./containers/$container
+            else
+              echo "$container is up to date version: $upstream_version"
             fi
           done
