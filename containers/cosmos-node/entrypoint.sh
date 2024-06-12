@@ -33,11 +33,11 @@ if [ ! -d "$CONFIG_DIR/data" ] || [ -z "$(ls -A $CONFIG_DIR/data)" ]; then
     # Download pruned snapshot
     # Or check in https://polkachu.com/tendermint_snapshots/cosmos for 15Gi snapshot
     latest_snapshot=$(wget -qO- https://snapshots.polkachu.com/snapshots/ | xmllint --format - | grep '<Key>' | grep 'cosmos' | sed -e 's|.*<Key>cosmos/\(.*\)</Key>.*|\1|')
-    echo -e "\e[32m[+]\e[0m Downloading snapshot $latest_snapshot"
+    echo -e "\e[32m[+]\e[0m Downloading snapshot"
     wget -nv -O cosmos.tar.lz4 https://snapshots.polkachu.com/snapshots/cosmos/$latest_snapshot
     
     # Extracting archive
-    echo -e "\e[32m[+]\e[0m Extracting archive $latest_snapshot"
+    echo -e "\e[32m[+]\e[0m Extracting archive"
     lz4 -qd cosmos.tar.lz4 > /dev/null 2>&1
     tar -xf cosmos.tar -C $CONFIG_DIR/data --strip-components=1
     rm -rf cosmos.tar.lz4

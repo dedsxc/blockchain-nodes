@@ -49,7 +49,7 @@ WORKDIR ${HOME}
 
 USER user
 
-# info: https://solana.com/fr/docs/rpc
+# Info: https://solana.com/fr/docs/rpc
 EXPOSE 8899 \
     8900
 
