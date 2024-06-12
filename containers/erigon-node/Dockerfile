@@ -29,7 +29,7 @@ FROM debian:stable-slim@sha256:2b2e35d67c8fda0ba853d40cd18e57b99ab12d82fd3200607
 ENV HOME=/app
 
 # Install wget
-RUN apt update && \
+RUN apt update; apt install ca-certificates -y && \
     mkdir ${HOME} && \
     adduser user
 
