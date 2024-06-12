@@ -1,6 +1,7 @@
 #!/bin/bash
 
 MONIKER=cosmos-4
+CONFIG_DIR=$HOME
 
 if [ ! -d "$CONFIG_DIR/data" ] || [ -z "$(ls -A $CONFIG_DIR/data)" ]; then
     # Init
@@ -41,6 +42,12 @@ if [ ! -d "$CONFIG_DIR/data" ] || [ -z "$(ls -A $CONFIG_DIR/data)" ]; then
     lz4 -qd -c cosmos.tar.lz4 > cosmos.tar
     tar -xf cosmos.tar -C $CONFIG_DIR/data --strip-components=1
     rm -rf cosmos.tar.lz4 cosmos.tar
+fi
+
+# Copy priv_validator_key 
+if [ -f "/tmp/config/priv_validator_key.json" ]; then
+    echo -e "\e[90m[+]\e[0m Copy priv_validator_key.json"
+    cp /tmp/config/priv_validator_key.json $CONFIG_DIR/config/priv_validator_key.json
 fi
 
 # Copy custom config

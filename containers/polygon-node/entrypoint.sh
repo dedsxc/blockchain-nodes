@@ -1,5 +1,7 @@
 #!/bin/bash
 
+CONFIG_DIR=$HOME
+
 # if data dir not exist, init config and download snapshot
 if [ ! -d "$CONFIG_DIR/data" ] || [ -z "$(ls -A $CONFIG_DIR/data)" ]; then
     # Init heimdalld
@@ -31,6 +33,12 @@ if [ ! -d "$CONFIG_DIR/data" ] || [ -z "$(ls -A $CONFIG_DIR/data)" ]; then
     rm -rf $CONFIG_DIR/data
     echo -e "\e[32m[+]\e[0m Downloading snapshot"
     curl -sL https://snapshot-download.polygon.technology/snapdown.sh | sed '/sudo apt-get update -y/d; /sudo apt-get install -y zstd pv aria2/d' | bash -s -- --network mainnet --client heimdall --extract-dir $CONFIG_DIR/data --validate-checksum true > $CONFIG_DIR/snapshot.log
+fi
+
+# Copy priv_validator_key 
+if [ -f "/tmp/config/priv_validator_key.json" ]; then
+    echo -e "\e[90m[+]\e[0m Copy priv_validator_key.json"
+    cp /tmp/config/priv_validator_key.json $CONFIG_DIR/config/priv_validator_key.json
 fi
 
 # Copy custom config
