@@ -48,7 +48,7 @@ WORKDIR ${HOME}
 USER user
 
 EXPOSE 1317 \
-    9090 \
+    26660 \
     26656 \
     26657
 
