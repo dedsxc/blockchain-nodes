@@ -20,14 +20,12 @@ FROM debian:stable-slim@sha256:58048232eb3f8e42fce80a5e616790f3df88d23d57efc4f41
 
 SHELL ["/bin/bash", "-c"]
 
-# Define CONFIG_DIR as env variable to be used in entrypoint.sh
-ENV CONFIG_DIR=/data
-ENV HOME=/app
+ENV HOME=/data
 
 # Install wget
 ## pv, aria2 is needed for downloading snapshot and zstd to extract
 RUN apt update; apt install -y wget curl sudo pv aria2 zstd && \
-    mkdir ${HOME} ${CONFIG_DIR} && \
+    mkdir ${HOME} && \
     adduser user
 
 # Copy the version and architecture info from the fetcher stage
@@ -41,7 +39,7 @@ RUN source /tmp/version_info && \
     rm -rf /var/lib/apt/lists/*
 
 # Setup permission
-RUN chown -R user:user ${HOME} ${CONFIG_DIR}
+RUN chown -R user:user ${HOME}
 
 WORKDIR ${HOME}
 

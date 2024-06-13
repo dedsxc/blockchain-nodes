@@ -26,13 +26,11 @@ RUN source /tmp/version_info && \
 ## Stage 2: Install node
 FROM debian:stable-slim@sha256:58048232eb3f8e42fce80a5e616790f3df88d23d57efc4f41f8d36587b79e571
 
-# Define CONFIG_DIR as env variable to be used in entrypoint.sh
-ENV CONFIG_DIR=/data
-ENV HOME=/app
+ENV HOME=/data
 
 # Install wget
 RUN apt update; apt install -y wget lz4 libxml2-utils && \
-    mkdir ${HOME} ${CONFIG_DIR} && \
+    mkdir ${HOME} && \
     adduser user
 
 # Copy the version and architecture info from the fetcher stage
@@ -41,7 +39,7 @@ COPY --from=fetcher /tmp/gaiad /usr/bin/gaiad
 COPY entrypoint.sh /usr/bin/entrypoint.sh
 
 # Setup permission
-RUN chown -R user:user ${HOME} ${CONFIG_DIR}
+RUN chown -R user:user ${HOME}
 
 WORKDIR ${HOME}
 

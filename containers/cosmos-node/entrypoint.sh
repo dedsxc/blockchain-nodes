@@ -1,6 +1,7 @@
 #!/bin/bash
 
 MONIKER=cosmos-4
+CONFIG_DIR=$HOME
 
 if [ ! -d "$CONFIG_DIR/data" ] || [ -z "$(ls -A $CONFIG_DIR/data)" ]; then
     # Init

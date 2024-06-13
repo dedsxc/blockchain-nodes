@@ -26,7 +26,7 @@ RUN source /tmp/version_info && \
 ## Stage 2: Install node
 FROM debian:stable-slim@sha256:58048232eb3f8e42fce80a5e616790f3df88d23d57efc4f41f8d36587b79e571
 
-ENV HOME=/app
+ENV HOME=/data
 
 # Install wget
 RUN apt update && \
