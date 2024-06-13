@@ -46,9 +46,10 @@ WORKDIR ${HOME}
 USER user
 
 EXPOSE 1317 \
-    26660 \
     26656 \
-    26657
+    26657 \
+    26658 \
+    26660
 
 ENTRYPOINT [ "entrypoint.sh"]
 
