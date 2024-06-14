@@ -1,5 +1,5 @@
 ## Stage 1: Fetch the latest version and determine the architecture and build
-FROM debian:stable-slim@sha256:58048232eb3f8e42fce80a5e616790f3df88d23d57efc4f41f8d36587b79e571 AS fetcher
+FROM debian:stable-slim@sha256:0200978f5b28cc795ec1699254fd789263193af9ab650bd2e4ef2bedf6cbd1c2 AS fetcher
 
 ENV LATEST_ENDPOINT=https://api.github.com/repos/solana-labs/solana/releases/latest
 ENV RELEASE_ENDPOINT=https://github.com/solana-labs/solana/releases/download
@@ -25,7 +25,7 @@ RUN source /tmp/version_info && \
     rm /tmp/solana.tar.bz2 
 
 ## Stage 2: Install node
-FROM debian:stable-slim@sha256:58048232eb3f8e42fce80a5e616790f3df88d23d57efc4f41f8d36587b79e571
+FROM debian:stable-slim@sha256:0200978f5b28cc795ec1699254fd789263193af9ab650bd2e4ef2bedf6cbd1c2
 
 ENV HOME=/data
 

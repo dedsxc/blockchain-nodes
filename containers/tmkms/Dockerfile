@@ -22,7 +22,7 @@ RUN source /tmp/version_info && \
 
 ## Stage 2: Install node
 # See: https://docs.osmosis.zone/osmosis-core/keys/tmkms/
-FROM debian:stable-slim@sha256:58048232eb3f8e42fce80a5e616790f3df88d23d57efc4f41f8d36587b79e571
+FROM debian:stable-slim@sha256:0200978f5b28cc795ec1699254fd789263193af9ab650bd2e4ef2bedf6cbd1c2
 
 ENV HOME=/data
 
