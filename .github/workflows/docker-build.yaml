@@ -64,4 +64,4 @@ jobs:
         run: |
           version=$(./containers/${{ matrix.container }}/VERSION)
           platform=$(cat ./containers/${{ matrix.container }}/PLATFORM)
-          docker buildx build --push --platform $platform -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ matrix.container }}:$version ./containers/${{ matrix.container }}
+          docker buildx build --push --platform $platform -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ matrix.container }}:$version -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/${{ matrix.container }}:latest ./containers/${{ matrix.container }}
