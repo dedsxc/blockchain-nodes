@@ -1,5 +1,5 @@
 ## Stage 1: Fetch the latest version and determine the architecture and build
-FROM rust:1.78.0-buster@sha256:522a925f1d3642ae82a0079694a9051ed1c15f189842dbe4d75a1210d3a77e7e AS fetcher
+FROM rust:1.79.0-buster@sha256:3ccb54f58e7853d290648010f0b6cc3432590d304f419485ce022e2b18cd1b46 AS fetcher
 
 ENV LATEST_ENDPOINT=https://api.github.com/repos/iqlusioninc/tmkms/tags
 
