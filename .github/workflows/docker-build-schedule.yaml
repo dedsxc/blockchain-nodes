@@ -35,7 +35,7 @@ jobs:
         run: |
           for container in $(find ./containers -mindepth 1 -maxdepth 1 -type d -printf '%f\n'); do
             upstream_version=$(./containers/$container/VERSION)
-            current_version=$(curl -sL -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.CI_BOT_TOKEN }}" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/user/packages/container/$container/versions | jq -r '.[] | select(.metadata.container.tags | length > 0) | .metadata.container.tags[]' | sort -V | tail -n1)
+            current_version=$(curl -sL -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.CI_BOT_TOKEN }}" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/user/packages/container/$container/versions | jq -r '.[] | select(.metadata.container.tags | length > 0) | .metadata.container.tags[]' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n1)
             if [ "$upstream_version" != "$current_version" ]; then
               echo "[+] New version for $container found: $upstream_version"
               platform=$(cat ./containers/$container/PLATFORM)
