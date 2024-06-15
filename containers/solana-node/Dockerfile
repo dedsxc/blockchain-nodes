@@ -49,8 +49,10 @@ WORKDIR ${HOME}
 
 USER user
 
-# Info: https://solana.com/fr/docs/rpc
+# https://docs.solanalabs.com/operations/requirements#networking
 EXPOSE 8899 \
-    8900
+    8900 \ 
+    8000-8013/tcp \
+    8000-8013/udp
 
 CMD [ "solana-validator"]
