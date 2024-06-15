@@ -39,7 +39,7 @@ jobs:
             if [ "$upstream_version" != "$current_version" ]; then
               echo "[+] New version for $container found: $upstream_version"
               platform=$(cat ./containers/$container/PLATFORM)
-              docker buildx build --push --platform $platform -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/$container:$upstream_version -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/$container:latest ./containers/$container
+              docker buildx build --push --platform $platform -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REGISTRY_REPO }}/$container:$upstream_version ./containers/$container
             else
               echo "$container is up to date version: $current_version"
             fi
