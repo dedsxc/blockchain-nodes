@@ -35,6 +35,7 @@ RUN apt update && \
 # Copy the version and architecture info from the fetcher stage
 COPY --from=fetcher /tmp/version_info /tmp/version_info
 COPY --from=fetcher /tmp/erigon /usr/bin/erigon
+COPY entrypoint.sh /usr/bin/entrypoint.sh
 
 # Setup permission
 RUN chown -R user:user ${HOME}
@@ -54,4 +55,4 @@ EXPOSE 8545 \
     9090 \
     6060
 
-CMD [ "erigon"]
+ENTRYPOINT [ "entrypoint.sh"]
