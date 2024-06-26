@@ -18,6 +18,10 @@ if [ -z "$NUMBER_FRAGMENT_SNAPSHOT" ]; then
   NUMBER_FRAGMENT_SNAPSHOT="7"
 fi
 
+if [ -z "$DB_SIZE" ]; then
+  # If DB_SIZE is not set, set it to the default value
+  DB_SIZE="12"
+fi
 
 # if chaindata dir not exist, download snapshot
 if [ ! -d "$CONFIG_DIR/chaindata" ] || [ -z "$(ls -A $CONFIG_DIR/chaindata)" ]; then
@@ -43,18 +47,4 @@ fi
 
 # Start erigon
 echo -e "\e[32m[+]\e[0m Start erigon"
-/app/erigon \
-    --metrics \
-    --metrics.addr=0.0.0.0 \
-    --db.size.limit=8TB \
-    --datadir=$CONFIG_DIR \
-    --chain=bsc \
-    --port=30303 \
-    --authrpc.port=8551 \
-    --torrent.port=42069 \
-    --http \
-    --http.addr=0.0.0.0 \
-    --http.port=8545 \
-    --http.vhosts=* \
-    --internalcl \
-    --http.api=eth,debug,net,trace,web3,erigon
+/app/erigon --metrics --metrics.addr=0.0.0.0 --db.size.limit=${DB_SIZE}TB --datadir=$CONFIG_DIR --chain=bsc --port=30303 --authrpc.port=8551 --torrent.port=42069 --http --http.addr=0.0.0.0 --http.port=8545 --http.vhosts="*" --internalcl --http.api=eth,debug,net,trace,web3,erigon
